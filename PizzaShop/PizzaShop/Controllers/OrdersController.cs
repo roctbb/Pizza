@@ -10,6 +10,7 @@ using PizzaShop.Models;
 
 namespace PizzaShop.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private PizzaDBContext db = new PizzaDBContext();
@@ -17,6 +18,7 @@ namespace PizzaShop.Controllers
         // GET: Orders
         public ActionResult Index()
         {
+            db.Pizzas.Load();
             return View(db.Orders.ToList());
         }
 
@@ -34,7 +36,7 @@ namespace PizzaShop.Controllers
             }
             return View(order);
         }
-
+        [AllowAnonymous]
         // GET: Orders/Create/ID
         public ActionResult Create(int ID)
         {
@@ -44,15 +46,19 @@ namespace PizzaShop.Controllers
         // POST: Orders/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,time,adress,phone,size,bread")] Order order)
+        public ActionResult Create(int ID, [Bind(Include = "ID,adress,phone,size,bread")] Order order)
         {
+            order.time = DateTime.Now;
+            db.Pizzas.Load();
+            order.choice = db.Pizzas.Find(ID);
             if (ModelState.IsValid)
             {
                 db.Orders.Add(order);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Pizzas");
             }
 
             return View(order);

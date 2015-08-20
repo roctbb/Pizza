@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.time)
         </th>
         <th>
+            Пицца
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.adress)
         </th>
         <th>
@@ -33,6 +36,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.choice.name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.adress)

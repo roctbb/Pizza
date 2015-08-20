@@ -10,6 +10,7 @@ using PizzaShop.Models;
 
 namespace PizzaShop.Controllers
 {
+    [Authorize]
     public class AdminPizzaController : Controller
     {
         private PizzaDBContext db = new PizzaDBContext();
@@ -17,6 +18,7 @@ namespace PizzaShop.Controllers
         // GET: AdminPizza
         public ActionResult Index()
         {
+            db.Pizzas.Load();
             return View(db.Pizzas.ToList());
         }
 
